@@ -1,874 +1,798 @@
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#090909">
-<meta name="description" content="AERONVEX — Explore aircraft, helicopters, rockets and spacecraft.">
-<title>AERONVEX | Beyond The Sky</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#8ed8f8">
+<title>AERONVEX | Explore Beyond the Sky</title>
+<meta name="description" content="Discover and share aircraft from around the world with AERONVEX.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
 <style>
-:root{--red:#e50914;--bg:#090909;--panel:#151515;--border:#333;--text:#f5f5f5;--muted:#aaa}
+:root {
+  --sky:#8ed8f8;
+  --sky-dark:#45b5e8;
+  --ice:#eaf8ff;
+  --white:#fff;
+  --navy:#183b60;
+  --navy-dark:#102b48;
+  --text:#183b60;
+  --muted:#68849b;
+  --border:#d8edf8;
+  --shadow:0 15px 40px rgba(24,59,96,.10);
+}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,Helvetica,sans-serif}
-body.intro-open{overflow:hidden}
-a{color:inherit;text-decoration:none}
+body{margin:0;font-family:Inter,sans-serif;background:#f4fbff;color:var(--text)}
 button,input,select,textarea{font:inherit}
 button{cursor:pointer}
-[hidden]{display:none!important}
+.hidden{display:none!important}
 
-/* CINEMATIC INTRO */
-.intro-screen{
- position:fixed;inset:0;z-index:9999;display:flex;
- align-items:center;justify-content:center;text-align:center;
- overflow:hidden;background:#030303;
- transition:opacity .9s,visibility .9s
-}
-.intro-screen.leaving{opacity:0;visibility:hidden;pointer-events:none}
-.intro-bg{
- position:absolute;inset:0;
- background-image:
- linear-gradient(180deg,#0007,#0002 45%,#000 100%),
- linear-gradient(90deg,#000a,transparent 50%,#000a),
- url("https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=2000&q=90");
- background-position:center;background-size:cover;
- transform:scale(1.12);animation:zoom 12s ease-out forwards
-}
-.intro-screen:before{
- content:"";position:absolute;inset:0;z-index:1;
- background:radial-gradient(ellipse,transparent 15%,#0009 100%)
-}
-.intro-scan{
- position:absolute;z-index:2;top:0;bottom:0;width:2px;
- background:linear-gradient(transparent,var(--red),transparent);
- box-shadow:0 0 18px var(--red);
- animation:scan 5s ease-in-out infinite alternate
-}
-.intro-content{position:relative;z-index:3;width:92%;animation:rise 1.2s ease both}
-.intro-line{
- display:flex;align-items:center;justify-content:center;gap:15px;
- color:white;letter-spacing:7px;font-size:clamp(10px,2vw,15px);
- margin-bottom:17px
-}
-.intro-line:before,.intro-line:after{
- content:"";width:clamp(25px,7vw,80px);height:2px;
- background:var(--red);box-shadow:0 0 12px var(--red)
-}
-.intro-title{
- margin:0;font-size:clamp(43px,10vw,110px);
- font-weight:1000;font-style:italic;letter-spacing:-3px;
- line-height:.95;text-shadow:0 4px 0 #777,0 10px 35px #000
-}
-.intro-title span{
- display:block;color:var(--red);font-size:.65em;
- letter-spacing:.32em;margin-top:15px;
- text-shadow:0 0 24px #e5091477
-}
-.intro-tagline{
- margin:28px 0;color:#eee;letter-spacing:clamp(3px,1vw,9px);
- font-size:clamp(10px,2vw,14px)
-}
-.intro-button{
- padding:16px 32px;border:2px solid var(--red);
- border-radius:50px;background:#0009;color:white;
- font-weight:bold;letter-spacing:2px;
- box-shadow:0 0 20px #e5091440;transition:.3s
-}
-.intro-button:hover{background:var(--red);transform:translateY(-3px)}
-.intro-bottom{margin-top:35px;color:#aaa;font-size:10px;letter-spacing:4px}
-.intro-bottom i{
- display:block;width:19px;height:30px;border:1px solid #aaa;
- border-radius:12px;margin:0 auto 12px;position:relative
-}
-.intro-bottom i:before{
- content:"";position:absolute;top:6px;left:8px;
- width:1px;height:6px;background:white;animation:dot 1.5s infinite
-}
-.intro-corner{
- position:absolute;z-index:3;bottom:22px;left:25px;
- color:#aaa;font-size:10px;letter-spacing:2px;text-align:left
-}
-.intro-corner b{color:var(--red)}
-.intro-top-right{
- position:absolute;z-index:3;top:25px;right:25px;
- font-size:10px;letter-spacing:3px;color:#bbb
-}
-.intro-top-right span{color:var(--red)}
-@keyframes zoom{to{transform:scale(1)}}
-@keyframes rise{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
-@keyframes scan{from{left:8%;opacity:.15}to{left:92%;opacity:.7}}
-@keyframes dot{to{transform:translateY(9px);opacity:0}}
-
-/* HEADER */
-header{
- position:sticky;top:0;z-index:50;display:flex;align-items:center;
- justify-content:space-between;gap:15px;padding:15px 5%;
- background:#090909f5;border-bottom:1px solid #292929
-}
-.logo{font-size:21px;font-weight:900;letter-spacing:1px}
-.logo span,h1 span,.section-heading span{color:var(--red)}
-nav{display:flex;gap:20px}
-nav a{font-size:13px;color:#ddd}
-nav a:hover{color:var(--red)}
-.menu-wrap{position:relative}
-.dots{
- width:42px;height:42px;border:1px solid #444;
- border-radius:50%;background:#181818;color:white;font-size:24px
-}
-.dropdown{
- display:none;position:absolute;right:0;top:48px;width:240px;
- padding:8px;background:#171717;border:1px solid #383838;border-radius:10px
-}
-.dropdown.open{display:block}
-.dropdown button{
- display:block;width:100%;padding:12px;text-align:left;
- color:white;background:none;border:0;border-radius:6px
-}
-.dropdown button:hover{background:#292929}
-
-/* HERO */
-.hero{
- min-height:570px;display:flex;align-items:center;padding:70px 7%;
+#intro{
+ position:fixed;inset:0;z-index:1000;
+ display:flex;align-items:center;justify-content:center;
+ text-align:center;padding:25px;color:white;overflow:hidden;
  background:
- linear-gradient(90deg,#050505 0%,#050505df 40%,#05050530 100%),
- url("https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=2000&q=90") center/cover
+ linear-gradient(120deg,rgba(12,43,72,.78),rgba(38,135,190,.30)),
+ url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=2000&q=85')
+ center/cover no-repeat,#183b60;
 }
-.hero-content{max-width:680px}
-.eyebrow{color:var(--red);font-weight:bold;letter-spacing:4px;font-size:12px}
-h1{font-size:clamp(45px,8vw,85px);line-height:.98;text-transform:uppercase}
-.hero p,.section-heading p{color:#bbb;line-height:1.8}
-.primary,.secondary{
- display:inline-block;padding:13px 19px;margin:8px 8px 0 0;
- border-radius:6px;font-weight:bold;border:1px solid var(--red)
-}
-.primary{background:var(--red);color:white}
-.primary:hover{background:#b90009}
-.secondary{background:transparent;color:white}
-.secondary:hover{background:var(--red)}
+.intro-content{position:relative;max-width:850px;animation:appear 1.2s ease}
+.intro-kicker{letter-spacing:7px;font-size:12px;font-weight:700;color:#d9f5ff}
+.intro-content h1{font-size:clamp(48px,10vw,105px);letter-spacing:5px;margin:20px 0 10px;font-weight:900}
+.intro-content p{font-size:clamp(14px,2.5vw,20px);letter-spacing:3px;color:#e4f7ff}
+.enter-btn{margin-top:25px;padding:16px 35px;border:1px solid white;background:white;color:var(--navy);border-radius:40px;font-weight:800;letter-spacing:2px;transition:.3s}
+.enter-btn:hover{transform:translateY(-4px);background:var(--sky)}
+@keyframes appear{from{opacity:0;transform:translateY(25px)}to{opacity:1;transform:translateY(0)}}
 
-/* SECTIONS */
-section{padding:55px 5%}
-.section-heading{margin-bottom:25px}
-.section-heading h2{font-size:clamp(27px,4vw,38px);text-transform:uppercase;margin:0 0 10px}
-.section-heading p{max-width:700px}
-.category-grid{
- display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:15px
-}
-.category{
- min-height:125px;padding:20px;background:#151515;
- border:1px solid #333;border-radius:10px;text-align:center;
- cursor:pointer;transition:.2s
-}
-.category:hover{border-color:var(--red);transform:translateY(-4px)}
-.category .symbol{display:block;font-size:35px;margin-bottom:12px}
-.category h3{font-size:13px;letter-spacing:1px}
+header{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.94);backdrop-filter:blur(14px);border-bottom:1px solid var(--border)}
+.nav{max-width:1250px;margin:auto;padding:15px 22px;display:flex;align-items:center;justify-content:space-between;gap:15px}
+.logo{font-size:25px;font-weight:900;letter-spacing:2px;color:var(--navy)}
+.logo span{color:var(--sky-dark)}
+.nav-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.nav-btn{border:0;background:var(--ice);color:var(--navy);padding:10px 15px;border-radius:25px;font-weight:700}
+.nav-btn:hover{background:var(--sky)}
+.primary-btn{background:var(--navy);color:white;border:0;padding:12px 20px;border-radius:25px;font-weight:700}
+.primary-btn:hover{background:#285c88}
+.menu-wrap{position:relative}
+.menu-dropdown{position:absolute;right:0;top:48px;width:220px;background:white;padding:10px;border-radius:15px;box-shadow:var(--shadow);border:1px solid var(--border)}
+.menu-dropdown button{display:block;width:100%;padding:12px;text-align:left;background:transparent;border:0;border-radius:9px;color:var(--navy);font-weight:600}
+.menu-dropdown button:hover{background:var(--ice)}
 
-/* GALLERY */
-.gallery-tools{display:flex;gap:12px;margin-bottom:24px;flex-wrap:wrap}
-.gallery-tools input,.gallery-tools select,.field input,.field select,.field textarea{
- padding:12px;width:100%;background:#171717;color:white;
- border:1px solid #393939;border-radius:7px
+.hero{
+ min-height:490px;display:flex;align-items:center;padding:65px 22px;
+ background:
+ linear-gradient(90deg,rgba(13,43,70,.83),rgba(13,43,70,.12)),
+ url('https://images.unsplash.com/photo-1474302770737-173ee21bab63?auto=format&fit=crop&w=2000&q=85')
+ center/cover no-repeat,#183b60;color:white;
 }
-.search-box{flex:1 1 260px}
-.gallery-tools select{flex:0 1 200px}
-.aircraft-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px}
-.aircraft-card{
- overflow:hidden;background:var(--panel);border:1px solid var(--border);
- border-radius:12px;transition:.2s
-}
-.aircraft-card:hover{transform:translateY(-4px);border-color:var(--red)}
-.aircraft-card img{
- width:100%;height:210px;object-fit:cover;background:#222
-}
-.aircraft-content{padding:17px}
-.aircraft-content h3{margin:8px 0;font-size:21px}
-.description{color:var(--muted);font-size:13px;line-height:1.6;overflow-wrap:anywhere}
-.spec-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:15px}
-.spec{padding:10px;background:#202020;border-radius:7px;overflow-wrap:anywhere}
-.spec small{display:block;color:#999;font-size:10px;text-transform:uppercase;margin-bottom:5px}
-.spec strong{font-size:13px}
-.tag{color:#ff575d;font-size:12px;font-weight:bold}
-.status{font-size:13px;color:#aaa;line-height:1.6;overflow-wrap:anywhere}
+.hero-inner{max-width:1200px;width:100%;margin:auto}
+.hero small{color:#bcecff;font-weight:800;letter-spacing:5px}
+.hero h1{font-size:clamp(42px,7vw,78px);max-width:750px;margin:20px 0;line-height:1.05}
+.hero p{max-width:570px;color:#e1f4ff;line-height:1.8;font-size:16px}
 
-/* CREATOR */
-.creator-panel{
- max-width:900px;margin:auto;display:grid;
- grid-template-columns:1fr 2fr;gap:30px;padding:28px;
- background:var(--panel);border:1px solid #333;border-radius:13px
-}
-.creator-mark{
- display:grid;place-items:center;min-height:180px;border-radius:10px;
- background:linear-gradient(135deg,#350000,#111,#292929);
- font-size:55px;font-weight:900;color:var(--red)
-}
-.creator-panel p{color:#bbb;line-height:1.8}
-.creator-panel a{color:#ff575d}
+section.content-section{max-width:1250px;padding:65px 22px;margin:auto}
+.section-heading{text-align:center;margin-bottom:35px}
+.section-heading small{color:var(--sky-dark);font-weight:800;letter-spacing:3px}
+.section-heading h2{font-size:clamp(28px,5vw,42px);margin:12px 0}
+.section-heading p{color:var(--muted);line-height:1.7}
 
-/* FORMS AND DASHBOARD */
-.panel{
- max-width:1000px;margin:auto;padding:24px;
- background:var(--panel);border:1px solid #383838;border-radius:12px
-}
-.modal-backdrop{
- display:none;position:fixed;inset:0;z-index:100;padding:20px;
- overflow-y:auto;align-items:center;justify-content:center;background:#000c
-}
-.modal-backdrop.open{display:flex}
-.modal{
- width:min(720px,100%);padding:25px;background:#141414;
- border:1px solid #444;border-radius:13px
-}
-.modal-header{display:flex;align-items:center;justify-content:space-between}
-.close-modal{font-size:25px;color:white;background:none;border:0}
-.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-.field label{display:block;color:#bbb;font-size:12px;margin-bottom:6px}
-.field.full{grid-column:1/-1}
-.field textarea{min-height:90px;resize:vertical}
-.form-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
-.pending-item{
- border:1px solid #383838;border-radius:10px;padding:15px;
- margin:12px 0;display:grid;grid-template-columns:130px 1fr;gap:15px
-}
-.pending-item img{width:130px;height:100px;object-fit:cover;border-radius:7px}
-.pending-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
-.small-btn{padding:8px 12px;border-radius:6px;border:1px solid #555;background:#222;color:white}
-.approve-btn{background:#176b35;border-color:#176b35}
-.reject-btn{background:#681d23;border-color:#681d23}
-hr{border:0;border-top:1px solid #333;margin:25px 0}
+.filters{display:flex;gap:9px;justify-content:center;flex-wrap:wrap;margin:25px 0}
+.filter-btn{border:1px solid var(--border);background:white;color:var(--navy);padding:10px 16px;border-radius:25px;font-weight:700}
+.filter-btn.active,.filter-btn:hover{background:var(--navy);color:white}
+.search-box{max-width:550px;margin:20px auto 35px}
+.search-box input{width:100%;padding:15px 20px;border:1px solid var(--border);border-radius:30px;outline:none;background:white;color:var(--navy)}
+.search-box input:focus{border-color:var(--sky-dark);box-shadow:0 0 0 3px rgba(69,181,232,.13)}
 
-/* FOOTER */
-footer{
- text-align:center;padding:28px 5%;border-top:1px solid #292929;
- color:#888;font-size:13px;line-height:1.9
-}
-footer strong{color:white}
-footer a{color:#ff575d}
+.aircraft-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:23px}
+.aircraft-card{background:white;border:1px solid var(--border);border-radius:19px;overflow:hidden;box-shadow:var(--shadow);transition:.3s}
+.aircraft-card:hover{transform:translateY(-6px);box-shadow:0 20px 45px rgba(24,59,96,.15)}
+.aircraft-card img{width:100%;height:205px;object-fit:cover;background:var(--ice)}
+.card-body{padding:19px}
+.type-label{display:inline-block;background:var(--ice);color:#247ba8;font-size:11px;font-weight:800;letter-spacing:1px;padding:7px 11px;border-radius:20px;text-transform:uppercase}
+.card-body h3{margin:13px 0 7px;font-size:21px}
+.card-body p{color:var(--muted);font-size:13px;line-height:1.6}
+.card-details{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px;border-top:1px solid var(--border);padding-top:14px}
+.detail{font-size:12px;color:var(--muted)}
+.detail strong{display:block;margin-top:4px;color:var(--navy);font-size:13px}
+.contributor{margin-top:14px;font-size:12px;color:#438ab2;font-weight:700}
+.empty-message{text-align:center;padding:35px;color:var(--muted);background:white;border-radius:15px}
 
-@media(max-width:900px){
- .aircraft-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-}
+.form-panel{max-width:760px;margin:auto;background:white;border:1px solid var(--border);box-shadow:var(--shadow);border-radius:22px;padding:30px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:17px}
+.form-group{display:flex;flex-direction:column;gap:8px}
+.form-group.full{grid-column:1/-1}
+.form-group label{font-size:13px;font-weight:700;color:var(--navy)}
+.form-group input,.form-group select,.form-group textarea{width:100%;border:1px solid var(--border);border-radius:11px;padding:13px;outline:none;color:var(--navy);background:#fbfeff}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--sky-dark)}
+.form-group textarea{min-height:110px;resize:vertical}
+.form-submit{width:100%;margin-top:22px;padding:15px;background:var(--navy);color:white;border:0;border-radius:30px;font-weight:800}
+.form-submit:hover{background:#285c88}
+.form-note{color:var(--muted);font-size:12px;line-height:1.6;margin-top:15px}
+.status-message{margin-top:15px;font-size:13px;font-weight:700;text-align:center;line-height:1.6}
+
+.dashboard-panel{background:white;padding:22px;border-radius:18px;border:1px solid var(--border);margin:25px 0;box-shadow:var(--shadow)}
+.dashboard-item{border:1px solid var(--border);padding:15px;border-radius:13px;margin:12px 0;display:flex;gap:15px;align-items:center;flex-wrap:wrap}
+.dashboard-item img{width:105px;height:75px;border-radius:9px;object-fit:cover}
+.dashboard-item-info{flex:1;min-width:150px}
+.dashboard-item-info p{font-size:12px;color:var(--muted);line-height:1.5}
+.small-action{border:0;padding:9px 13px;border-radius:20px;font-weight:700;margin:3px}
+.approve-btn{background:#dff7e8;color:#167044}
+.reject-btn{background:#fff0e9;color:#a34828}
+.delete-btn{background:#eaf3fa;color:var(--navy)}
+
+footer{background:var(--navy-dark);color:white;text-align:center;padding:45px 20px;line-height:1.8}
+footer strong{color:var(--sky)}
+footer a{color:#bcecff;text-decoration:none}
+
 @media(max-width:650px){
- header{padding:12px 4%}
- .logo{font-size:15px}
- nav{gap:10px}
- nav a{font-size:11px}
- nav a:nth-child(3){display:none}
- .hero{min-height:470px;padding:50px 6%}
- section{padding:40px 5%}
- .category-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
- .aircraft-grid{grid-template-columns:1fr}
- .creator-panel{grid-template-columns:1fr;padding:20px}
- .creator-mark{min-height:120px}
+ .nav{padding:13px}
+ .logo{font-size:20px}
+ .nav-actions{gap:5px}
+ .nav-btn,.primary-btn{padding:9px 11px;font-size:12px}
+ .hero{min-height:430px}
  .form-grid{grid-template-columns:1fr}
- .field.full{grid-column:auto}
- .pending-item{grid-template-columns:1fr}
- .pending-item img{width:100%;height:180px}
-}
-@media(prefers-reduced-motion:reduce){
- *,*:before,*:after{animation:none!important;scroll-behavior:auto!important;transition:none!important}
+ .form-group.full{grid-column:auto}
+ .form-panel{padding:20px}
+ section.content-section{padding:48px 15px}
 }
 </style>
 </head>
 
-<body class="intro-open">
+<body>
 
-<!-- CINEMATIC OPENING -->
-<div class="intro-screen" id="introScreen">
- <div class="intro-bg"></div>
- <div class="intro-scan"></div>
- <div class="intro-top-right">AV<span> / </span>EST. 2026</div>
+<div id="intro">
  <div class="intro-content">
-  <div class="intro-line">WELCOME TO</div>
-  <h1 class="intro-title">AERONVEX<span>DISCOVER THE WORLD ABOVE</span></h1>
-  <p class="intro-tagline">AIRCRAFT • AVIATION • ROCKETS • SPACE</p>
-  <button class="intro-button" id="enterButton">ENTER GALLERY →</button>
-  <div class="intro-bottom"><i></i>SELECT ENTER TO EXPLORE</div>
+  <div class="intro-kicker">THE WORLD OF AVIATION</div>
+  <h1>AERONVEX</h1>
+  <p>EXPLORE BEYOND THE SKY</p>
+  <button class="enter-btn" id="enterGallery">ENTER GALLERY →</button>
  </div>
- <div class="intro-corner"><b>AERONVEX</b><br>BUILT FOR AVIATION ENTHUSIASTS</div>
 </div>
 
 <header>
- <a class="logo" href="#home">AERO<span>NVEX</span></a>
- <nav>
-  <a href="#home">Home</a>
-  <a href="#categories">Categories</a>
-  <a href="#gallery">Gallery</a>
-  <a href="#creator">Creator</a>
- </nav>
- <div class="menu-wrap">
-  <button class="dots" id="menuButton" aria-label="Open menu" aria-expanded="false">⋮</button>
-  <div class="dropdown" id="menuDropdown">
-   <button id="submitMenuButton">✈️ Submit Aircraft</button>
-   <button id="ownerLoginButton">🔐 Owner Login</button>
-   <button id="reviewButton" hidden>📝 Review Submissions</button>
-   <button id="signOutButton" hidden>Sign Out</button>
+ <nav class="nav">
+  <div class="logo">AERO<span>NVEX</span></div>
+  <div class="nav-actions">
+   <button class="nav-btn" onclick="scrollToSection('gallery')">Gallery</button>
+   <button class="primary-btn" onclick="scrollToSection('submit')">Submit Aircraft</button>
+   <div class="menu-wrap">
+    <button class="nav-btn" id="menuButton">☰ Menu</button>
+    <div class="menu-dropdown hidden" id="menuDropdown">
+     <button onclick="scrollToSection('gallery')">Explore Gallery</button>
+     <button onclick="scrollToSection('submit')">Submit Aircraft</button>
+     <button id="ownerLoginMenu">Owner Login</button>
+     <button id="reviewMenu" class="hidden">Review Submissions</button>
+     <button id="signOutMenu" class="hidden">Sign Out</button>
+    </div>
+   </div>
   </div>
- </div>
+ </nav>
 </header>
 
-<main>
-<section class="hero" id="home">
- <div class="hero-content">
-  <div class="eyebrow">THE WORLD OF AVIATION & AEROSPACE</div>
-  <h1>BEYOND THE <span>SKY.</span></h1>
-  <p>Explore extraordinary aircraft, powerful machines and the engineering that takes humanity beyond the limits of the sky.</p>
-  <a class="primary" href="#gallery">Explore Gallery</a>
-  <button class="secondary" id="heroSubmitButton">Submit Aircraft</button>
+<div class="hero">
+ <div class="hero-inner">
+  <small>DISCOVER THE WORLD OF FLIGHT</small>
+  <h1>BEYOND THE LIMITS OF THE SKY.</h1>
+  <p>From powerful military aircraft to magnificent commercial airliners, private jets and rockets. Discover the machines that take humanity beyond the horizon.</p>
+  <button class="enter-btn" onclick="scrollToSection('gallery')">EXPLORE AIRCRAFT →</button>
  </div>
-</section>
+</div>
 
-<section id="categories">
+<section class="content-section" id="gallery">
  <div class="section-heading">
-  <h2>Explore <span>Categories</span></h2>
-  <p>Discover aircraft and aerospace machines from around the world.</p>
+  <small>THE COLLECTION</small>
+  <h2>Explore the Aircraft</h2>
+  <p>Discover aircraft shared by aviation enthusiasts around the world.</p>
  </div>
- <div class="category-grid">
-  <div class="category" data-category="Commercial"><span class="symbol">✈️</span><h3>COMMERCIAL</h3></div>
-  <div class="category" data-category="Military"><span class="symbol">🛩️</span><h3>MILITARY</h3></div>
-  <div class="category" data-category="Private"><span class="symbol">🛫</span><h3>PRIVATE</h3></div>
-  <div class="category" data-category="Cargo"><span class="symbol">📦</span><h3>CARGO</h3></div>
-  <div class="category" data-category="Helicopter"><span class="symbol">🚁</span><h3>HELICOPTERS</h3></div>
-  <div class="category" data-category="Rocket"><span class="symbol">🚀</span><h3>ROCKETS</h3></div>
-  <div class="category" data-category="Spacecraft"><span class="symbol">🌌</span><h3>SPACECRAFT</h3></div>
-  <div class="category" data-category=""><span class="symbol">🌍</span><h3>ALL COLLECTION</h3></div>
+ <div class="search-box">
+  <input id="searchInput" type="search" placeholder="Search aircraft, manufacturer or contributor...">
  </div>
-</section>
-
-<section id="gallery">
- <div class="section-heading">
-  <h2>AERONVEX <span>Collection</span></h2>
-  <p>Discover aircraft and aerospace machines. Community submissions appear here only after owner approval.</p>
+ <div class="filters" id="filters">
+  <button class="filter-btn active" data-filter="All">All</button>
+  <button class="filter-btn" data-filter="Commercial">Commercial</button>
+  <button class="filter-btn" data-filter="Military">Military</button>
+  <button class="filter-btn" data-filter="Private">Private</button>
+  <button class="filter-btn" data-filter="Cargo">Cargo</button>
+  <button class="filter-btn" data-filter="Helicopter">Helicopters</button>
+  <button class="filter-btn" data-filter="Rocket">Rockets</button>
+  <button class="filter-btn" data-filter="Spacecraft">Spacecraft</button>
+  <button class="filter-btn" data-filter="Other">Other</button>
  </div>
- <div class="gallery-tools">
-  <div class="search-box"><input type="search" id="aircraftSearch" placeholder="Search aircraft, name, manufacturer..."></div>
-  <select id="typeFilter">
-   <option value="">All categories</option>
-   <option>Commercial</option><option>Military</option>
-   <option>Private</option><option>Cargo</option>
-   <option>Helicopter</option><option>Rocket</option><option>Spacecraft</option>
-  </select>
- </div>
- <p class="status" id="galleryStatus" aria-live="polite">Connecting to AERONVEX collection...</p>
  <div class="aircraft-grid" id="aircraftGrid"></div>
- <p class="status" id="emptyState" hidden>No approved aircraft match your search yet.</p>
+ <div class="empty-message hidden" id="emptyGallery">No aircraft found. Be the first to submit one!</div>
 </section>
 
-<section id="creator">
+<section class="content-section" id="submit">
  <div class="section-heading">
-  <h2>Meet the <span>Creator</span></h2>
-  <p>A collection for people who are fascinated by aviation and aerospace engineering.</p>
+  <small>JOIN THE COLLECTION</small>
+  <h2>Submit Your Aircraft</h2>
+  <p>Share an aircraft with the AERONVEX community.</p>
  </div>
- <div class="creator-panel">
-  <div class="creator-mark">AV</div>
-  <div>
-   <h2>P.G.O. Jason Rison</h2>
-   <p>Creator of AERONVEX — a collection dedicated to aircraft, aviation, rockets and aerospace exploration.</p>
-   <p>Instagram: <a href="https://www.instagram.com/AERONVEX/" target="_blank" rel="noopener noreferrer">@AERONVEX</a></p>
-  </div>
- </div>
-</section>
-
-<section id="reviewSection" hidden>
- <div class="section-heading">
-  <h2>Owner <span>Dashboard</span></h2>
-  <p>Review aircraft submissions before they appear in the public gallery.</p>
- </div>
- <div class="panel">
-  <h3>Pending submissions</h3>
-  <p class="status" id="pendingStatus">Loading submissions...</p>
-  <div id="pendingList"></div>
-  <hr>
-  <h3>Published aircraft</h3>
-  <div id="publishedList"></div>
- </div>
-</section>
-</main>
-
-<footer>
- <strong>AERONVEX</strong><br>
- Created by P.G.O. Jason Rison · Instagram @AERONVEX<br>
- Discover The World Above.<br>
- © <span id="currentYear"></span> AERONVEX.
-</footer>
-
-<!-- AIRCRAFT SUBMISSION -->
-<div class="modal-backdrop" id="submitModal" role="dialog" aria-modal="true">
- <div class="modal">
-  <div class="modal-header">
-   <h2>Submit Your Aircraft</h2>
-   <button class="close-modal" data-close="submitModal">×</button>
-  </div>
-  <p class="status">Submit your aircraft information and photo. Your submission stays private until approved. Photo limit: 5 MB.</p>
-  <form id="submitForm">
+ <div class="form-panel">
+  <form id="aircraftForm">
    <div class="form-grid">
-    <div class="field">
-     <label for="aType">Type *</label>
-     <select id="aType" required>
-      <option>Commercial</option><option>Military</option>
-      <option>Private</option><option>Cargo</option>
-      <option>Helicopter</option><option>Rocket</option><option>Spacecraft</option>
+    <div class="form-group">
+     <label for="contributor">Your Name *</label>
+     <input id="contributor" maxlength="60" required placeholder="Your display name">
+    </div>
+    <div class="form-group">
+     <label for="aircraftType">Aircraft Type *</label>
+     <select id="aircraftType" required>
+      <option value="">Select type</option>
+      <option>Commercial</option>
+      <option>Military</option>
+      <option>Private</option>
+      <option>Cargo</option>
+      <option>Helicopter</option>
+      <option>Rocket</option>
+      <option>Spacecraft</option>
+      <option>Other</option>
      </select>
     </div>
-    <div class="field"><label for="aName">Aircraft Name *</label><input id="aName" required maxlength="100" placeholder="Boeing 787 Dreamliner"></div>
-    <div class="field"><label for="aManufacturer">Manufacturer</label><input id="aManufacturer" maxlength="100" placeholder="Boeing"></div>
-    <div class="field"><label for="aModel">Model</label><input id="aModel" maxlength="100" placeholder="787-9"></div>
-    <div class="field"><label for="aYear">Year</label><input id="aYear" type="number" min="1800" max="2200" placeholder="2024"></div>
-    <div class="field"><label for="aWeight">Weight (kg)</label><input id="aWeight" type="number" min="0" placeholder="Not required for every type"></div>
-    <div class="field"><label for="aSpeed">Maximum Speed (km/h)</label><input id="aSpeed" type="number" min="0" placeholder="900"></div>
-    <div class="field"><label for="aEngine">Engine / Propulsion</label><input id="aEngine" maxlength="120" placeholder="Turbofan"></div>
-    <div class="field"><label for="aRange">Range (km)</label><input id="aRange" type="number" min="0" placeholder="14000"></div>
-    <div class="field"><label for="aContributor">Contributor Name *</label><input id="aContributor" required maxlength="100" placeholder="Your name"></div>
-    <div class="field"><label for="aPostedBy">Posted By</label><input id="aPostedBy" maxlength="100" placeholder="Name to display on the post"></div>
-    <div class="field full"><label for="aDescription">Description</label><textarea id="aDescription" maxlength="1000" placeholder="Tell us about this aircraft..."></textarea></div>
-    <div class="field full"><label for="aPhoto">Aircraft Photo * (JPG, PNG or WebP, max 5 MB)</label><input id="aPhoto" type="file" accept="image/jpeg,image/png,image/webp" required></div>
+    <div class="form-group">
+     <label for="aircraftName">Aircraft Name *</label>
+     <input id="aircraftName" maxlength="100" required placeholder="Example: Boeing 747">
+    </div>
+    <div class="form-group">
+     <label for="manufacturer">Manufacturer</label>
+     <input id="manufacturer" maxlength="80" placeholder="Example: Boeing">
+    </div>
+    <div class="form-group">
+     <label for="modelYear">Model / Year</label>
+     <input id="modelYear" maxlength="60" placeholder="Example: 747-8 / 2010">
+    </div>
+    <div class="form-group">
+     <label for="weight">Weight</label>
+     <input id="weight" maxlength="60" placeholder="Example: 447,700 kg">
+    </div>
+    <div class="form-group">
+     <label for="topSpeed">Top Speed</label>
+     <input id="topSpeed" maxlength="60" placeholder="Example: 988 km/h">
+    </div>
+    <div class="form-group">
+     <label for="range">Range</label>
+     <input id="range" maxlength="60" placeholder="Example: 13,450 km">
+    </div>
+    <div class="form-group full">
+     <label for="engine">Engine</label>
+     <input id="engine" maxlength="120" placeholder="Engine details">
+    </div>
+    <div class="form-group full">
+     <label for="description">Description</label>
+     <textarea id="description" maxlength="1000" placeholder="Tell us about this aircraft..."></textarea>
+    </div>
+    <div class="form-group full">
+     <label for="aircraftPhoto">Aircraft Photo * (JPG, PNG or WebP, maximum 5 MB)</label>
+     <input id="aircraftPhoto" type="file" accept="image/jpeg,image/png,image/webp" required>
+    </div>
    </div>
-   <div class="form-actions">
-    <button class="primary" id="sendButton" type="submit">Send for Approval</button>
-    <button class="secondary" type="button" data-close="submitModal">Cancel</button>
-   </div>
-   <p class="status" id="submitStatus" aria-live="polite"></p>
+   <button class="form-submit" type="submit" id="submitButton">SUBMIT AIRCRAFT</button>
+   <div class="form-note">Submissions are reviewed by the AERONVEX owner before appearing in the public gallery. Only upload images you have permission to share.</div>
+   <div class="status-message" id="submitStatus"></div>
   </form>
  </div>
-</div>
+</section>
 
-<!-- OWNER LOGIN -->
-<div class="modal-backdrop" id="loginModal" role="dialog" aria-modal="true">
- <div class="modal">
-  <div class="modal-header">
-   <h2>Owner Login</h2>
-   <button class="close-modal" data-close="loginModal">×</button>
-  </div>
-  <p class="status">Sign in using your existing MOTOVEXAR Firebase owner account.</p>
+<section class="content-section hidden" id="loginSection">
+ <div class="section-heading">
+  <small>OWNER ACCESS</small>
+  <h2>Owner Login</h2>
+  <p>Sign in to manage the AERONVEX collection.</p>
+ </div>
+ <div class="form-panel">
   <form id="loginForm">
-   <div class="field">
-    <label for="ownerEmail">Owner Email</label>
-    <input id="ownerEmail" type="email" autocomplete="username" placeholder="Owner email" required>
+   <div class="form-group">
+    <label for="ownerEmail">Email</label>
+    <input id="ownerEmail" type="email" autocomplete="username" required>
    </div>
-   <div class="field" style="margin-top:12px">
+   <br>
+   <div class="form-group">
     <label for="ownerPassword">Password</label>
-    <input id="ownerPassword" type="password" autocomplete="current-password" placeholder="Owner password" required>
+    <input id="ownerPassword" type="password" autocomplete="current-password" required>
    </div>
-   <div class="form-actions"><button class="primary" type="submit">Sign In</button></div>
-   <p class="status" id="loginStatus" aria-live="polite"></p>
+   <button class="form-submit" type="submit" id="loginButton">SIGN IN</button>
+   <div class="status-message" id="loginStatus"></div>
   </form>
  </div>
-</div>
+</section>
+
+<section class="content-section hidden" id="dashboardSection">
+ <div class="section-heading">
+  <small>OWNER CONTROL</small>
+  <h2>AERONVEX Dashboard</h2>
+  <p>Review submissions and manage published aircraft.</p>
+ </div>
+ <div class="dashboard-panel">
+  <h3>Pending Aircraft</h3>
+  <div id="pendingList">Loading submissions...</div>
+ </div>
+ <div class="dashboard-panel">
+  <h3>Published Aircraft</h3>
+  <div id="publishedList">Loading aircraft...</div>
+ </div>
+</section>
+
+<section class="content-section">
+ <div class="section-heading">
+  <small>ABOUT AERONVEX</small>
+  <h2>Created for Aviation Enthusiasts</h2>
+  <p>A place to discover, appreciate and share aircraft from around the world.</p>
+  <p><strong>Created by P.G.O. Jason Rison</strong></p>
+  <p>Instagram: <strong>@AERONVEX</strong></p>
+ </div>
+</section>
+
+<footer>
+ <div class="logo" style="color:white">AERO<span>NVEX</span></div>
+ <p>EXPLORE BEYOND THE SKY.</p>
+ <p>Created by <strong>P.G.O. Jason Rison</strong></p>
+ <p>Instagram: <strong>@AERONVEX</strong></p>
+ <p>© <span id="year"></span> AERONVEX. All rights reserved.</p>
+</footer>
 
 <script type="module">
-import {initializeApp} from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+
 import {
- getAuth,signInWithEmailAndPassword,onAuthStateChanged,
- signOut,signInAnonymously
+ getAuth,
+ signInAnonymously,
+ signInWithEmailAndPassword,
+ signOut,
+ onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+
 import {
- getDatabase,ref,onValue,push,set,remove
+ getDatabase,
+ ref,
+ push,
+ set,
+ remove,
+ onValue
 } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
 
-/* FIREBASE: SAME PROJECT AS MOTOVEXAR */
-const firebaseConfig={
- apiKey:"AIzaSyD1mKQA4ZkQ9BoYCUpaEFGGi8rwyU8LOPA",
- authDomain:"super-car-collection.firebaseapp.com",
- databaseURL:"https://super-car-collection-default-rtdb.firebaseio.com",
- projectId:"super-car-collection",
- storageBucket:"super-car-collection.firebasestorage.app",
- messagingSenderId:"729656979405",
- appId:"1:729656979405:web:8c743eb5e3c55c14c25e84",
- measurementId:"G-7JQ0VKWLLM"
+/* FIREBASE CONFIGURATION */
+
+const firebaseConfig = {
+ apiKey: "AIzaSyD1mKQA4ZkQ9BoYCUpaEFGGi8rwyU8LOPA",
+ authDomain: "super-car-collection.firebaseapp.com",
+ databaseURL: "https://super-car-collection-default-rtdb.firebaseio.com",
+ projectId: "super-car-collection",
+ storageBucket: "super-car-collection.firebasestorage.app",
+ messagingSenderId: "729656979405",
+ appId: "1:729656979405:web:8c743eb5e3c55c14c25e84",
+ measurementId: "G-7JQ0VKWLLM"
 };
 
 /* OWNER AND CLOUDINARY */
-const OWNER_EMAIL="okitharison8@gmail.com";
-const CLOUDINARY_CLOUD_NAME="zl6ldx0y";
-const CLOUDINARY_UPLOAD_PRESET="car_gallery_upload";
-const CLOUDINARY_FOLDER="aeronvex";
+
+const OWNER_EMAIL = "okitharison8@gmail.com";
+const CLOUDINARY_CLOUD_NAME = "zl6ldx0y";
+const CLOUDINARY_UPLOAD_PRESET = "car_gallery_upload";
 
 /* SEPARATE AERONVEX DATABASE PATHS */
-const PENDING_PATH="aeronvexPendingAircraft";
-const APPROVED_PATH="aeronvexApprovedAircraft";
 
-const $=id=>document.getElementById(id);
-const esc=value=>String(value??"").replace(/[&<>"']/g,c=>({
- "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
-}[c]));
+const PENDING_PATH = "aeronvexPendingAircraft";
+const APPROVED_PATH = "aeronvexApprovedAircraft";
 
-const app=initializeApp(firebaseConfig);
-const auth=getAuth(app);
-const db=getDatabase(app);
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getDatabase(app);
 
-let currentUser=null;
-let approvedAircraft=[];
-let pendingAircraft=[];
-let approvedStarted=false;
-let pendingStarted=false;
-let stopApproved=null;
-let stopPending=null;
+let isOwner = false;
+let approvedAircraft = {};
+let pendingAircraft = {};
+let activeFilter = "All";
+let pendingListenerStarted = false;
 
-$("currentYear").textContent=new Date().getFullYear();
+const $ = id => document.getElementById(id);
+
+$("year").textContent = new Date().getFullYear();
+
+/* HELPERS */
+
+function showStatus(id,message,color="#247ba8"){
+ $(id).textContent=message;
+ $(id).style.color=color;
+}
+
+function escapeHTML(value=""){
+ return String(value).replace(/[&<>"']/g,char=>({
+  "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+ })[char]);
+}
+
+function aircraftData(snapshot){
+ const result={};
+ snapshot.forEach(child=>result[child.key]=child.val());
+ return result;
+}
+
+function friendlyError(error){
+ const messages={
+  "auth/invalid-credential":"Incorrect email or password.",
+  "auth/invalid-email":"Please enter a valid email.",
+  "auth/too-many-requests":"Too many attempts. Please try again later.",
+  "auth/network-request-failed":"Network error. Check your internet connection.",
+  "PERMISSION_DENIED":"Database permission denied. Check Firebase Rules."
+ };
+ return messages[error.code]||error.message||"Something went wrong.";
+}
 
 /* INTRO */
-$("enterButton").addEventListener("click",()=>{
- $("introScreen").classList.add("leaving");
- document.body.classList.remove("intro-open");
- setTimeout(()=>$("introScreen").style.display="none",950);
+
+$("enterGallery").addEventListener("click",()=>{
+ $("intro").style.opacity="0";
+ $("intro").style.transition="opacity .7s";
+ setTimeout(()=>$("intro").remove(),750);
 });
 
-/* GENERAL HELPERS */
-function msg(id,text,type=""){
- $(id).textContent=text;
- $(id).className="status "+type;
-}
-function isOwner(){
- return !!currentUser &&
- currentUser.email?.toLowerCase()===OWNER_EMAIL.toLowerCase();
-}
-function openModal(id){$(id).classList.add("open")}
-function closeModal(id){$(id).classList.remove("open")}
+/* NAVIGATION */
 
-function updateMenu(){
- $("ownerLoginButton").hidden=isOwner();
- $("reviewButton").hidden=!isOwner();
- $("signOutButton").hidden=!isOwner();
-}
+window.scrollToSection=function(id){
+ const section=$(id);
+ if(section)section.scrollIntoView({behavior:"smooth"});
+ $("menuDropdown").classList.add("hidden");
+};
 
 $("menuButton").addEventListener("click",()=>{
- const opened=$("menuDropdown").classList.toggle("open");
- $("menuButton").setAttribute("aria-expanded",String(opened));
-});
-document.addEventListener("click",e=>{
- if(!e.target.closest(".menu-wrap")){
-  $("menuDropdown").classList.remove("open");
-  $("menuButton").setAttribute("aria-expanded","false");
- }
-});
-$("submitMenuButton").addEventListener("click",()=>{
- $("menuDropdown").classList.remove("open");
- openModal("submitModal");
-});
-$("heroSubmitButton").addEventListener("click",()=>openModal("submitModal"));
-$("ownerLoginButton").addEventListener("click",()=>{
- $("menuDropdown").classList.remove("open");
- openModal("loginModal");
-});
-$("reviewButton").addEventListener("click",()=>{
- $("menuDropdown").classList.remove("open");
- $("reviewSection").hidden=false;
- $("reviewSection").scrollIntoView({behavior:"smooth"});
-});
-$("signOutButton").addEventListener("click",async()=>{
- try{await signOut(auth)}
- catch(e){alert("Sign out failed: "+e.message)}
-});
-document.querySelectorAll("[data-close]").forEach(button=>
- button.addEventListener("click",()=>closeModal(button.dataset.close))
-);
-document.querySelectorAll(".modal-backdrop").forEach(modal=>
- modal.addEventListener("click",e=>{
-  if(e.target===modal)closeModal(modal.id);
- })
-);
-
-/* CATEGORY AND SEARCH */
-$("aircraftSearch").addEventListener("input",renderGallery);
-$("typeFilter").addEventListener("change",renderGallery);
-document.querySelectorAll(".category").forEach(card=>{
- card.addEventListener("click",()=>{
-  $("typeFilter").value=card.dataset.category;
-  renderGallery();
-  $("gallery").scrollIntoView({behavior:"smooth"});
- });
+ $("menuDropdown").classList.toggle("hidden");
 });
 
-/* AUTHENTICATION */
-onAuthStateChanged(auth,async user=>{
- currentUser=user;
- updateMenu();
-
- if(!user){
-  try{await signInAnonymously(auth)}
-  catch(e){
-   msg("galleryStatus","Could not connect. Check Firebase Anonymous Authentication and database rules.");
-   console.error(e);
-  }
-  return;
- }
-
- startApprovedListener();
-
- if(isOwner()){
-  startPendingListener();
-  $("reviewSection").hidden=false;
-  renderPending();
-  renderPublished();
- }else{
-  if(stopPending)stopPending();
-  stopPending=null;
-  pendingStarted=false;
-  pendingAircraft=[];
-  $("reviewSection").hidden=true;
+document.addEventListener("click",event=>{
+ if(!event.target.closest(".menu-wrap")){
+  $("menuDropdown").classList.add("hidden");
  }
 });
 
-/* PUBLIC APPROVED AIRCRAFT */
-function startApprovedListener(){
- if(approvedStarted)return;
- approvedStarted=true;
+$("ownerLoginMenu").addEventListener("click",()=>{
+ $("loginSection").classList.remove("hidden");
+ scrollToSection("loginSection");
+});
 
- stopApproved=onValue(ref(db,APPROVED_PATH),snapshot=>{
-  const data=snapshot.val()||{};
-  approvedAircraft=Object.entries(data).map(([id,item])=>({id,...item}));
-  renderGallery();
-  renderPublished();
- },error=>{
-  msg("galleryStatus","Could not load aircraft. Check Realtime Database rules.");
-  console.error(error);
+$("reviewMenu").addEventListener("click",()=>{
+ scrollToSection("dashboardSection");
+});
+
+$("signOutMenu").addEventListener("click",async()=>{
+ try{
+  await signOut(auth);
+  showStatus("loginStatus","Signed out successfully.");
+ }catch(error){alert(friendlyError(error));}
+});
+
+/* FILTERS */
+
+$("filters").addEventListener("click",event=>{
+ const button=event.target.closest("[data-filter]");
+ if(!button)return;
+ activeFilter=button.dataset.filter;
+ document.querySelectorAll(".filter-btn").forEach(btn=>{
+  btn.classList.toggle("active",btn===button);
  });
-}
+ renderGallery();
+});
 
-/* OWNER-ONLY PENDING LISTENER */
-function startPendingListener(){
- if(!isOwner()||pendingStarted)return;
- pendingStarted=true;
+$("searchInput").addEventListener("input",renderGallery);
 
- stopPending=onValue(ref(db,PENDING_PATH),snapshot=>{
-  if(!isOwner())return;
-  const data=snapshot.val()||{};
-  pendingAircraft=Object.entries(data).map(([id,item])=>({id,...item}));
-  renderPending();
- },error=>{
-  msg("pendingStatus","Could not load pending submissions. Check database permissions.");
-  console.error(error);
- });
-}
-
-/* AIRCRAFT CARDS */
-function renderSpecs(item){
- const specs=[
-  ["Weight",item.weight?item.weight+" kg":"Not provided"],
-  ["Maximum speed",item.speed?item.speed+" km/h":"Not provided"],
-  ["Engine",item.engine||"Not provided"],
-  ["Range",item.range?item.range+" km":"Not provided"],
-  ["Model",item.model||"Not provided"],
-  ["Year",item.year||"Not provided"]
- ];
- return specs.map(([name,value])=>
-  `<div class="spec"><small>${esc(name)}</small><strong>${esc(value)}</strong></div>`
- ).join("");
-}
+/* GALLERY */
 
 function renderGallery(){
- const term=$("aircraftSearch").value.trim().toLowerCase();
- const type=$("typeFilter").value;
+ const grid=$("aircraftGrid");
+ const search=$("searchInput").value.trim().toLowerCase();
+ grid.innerHTML="";
 
- const list=approvedAircraft.filter(item=>
-  (!type||item.type===type)&&
-  [item.name,item.manufacturer,item.model,item.type,item.description,item.engine,item.postedBy]
-   .join(" ").toLowerCase().includes(term)
- );
+ const items=Object.entries(approvedAircraft).filter(([id,item])=>{
+  const type=item.type||"Other";
+  const matchesFilter=activeFilter==="All"||type===activeFilter;
+  const searchable=[
+   item.name,item.manufacturer,item.type,item.contributor,item.description
+  ].join(" ").toLowerCase();
+  return matchesFilter&&searchable.includes(search);
+ });
 
- $("galleryStatus").textContent=
-  `${list.length} approved aircraft in the collection`;
- $("emptyState").hidden=list.length>0;
+ $("emptyGallery").classList.toggle("hidden",items.length!==0);
 
- $("aircraftGrid").innerHTML=list.map(item=>`
-  <article class="aircraft-card">
-   <img src="${esc(item.photoURL)}" alt="${esc(item.name)}" loading="lazy">
-   <div class="aircraft-content">
-    <div class="tag">${esc(item.type||"AIRCRAFT").toUpperCase()}</div>
-    <h3>${esc(item.name)}</h3>
-    <p class="description">
-     ${esc(item.manufacturer||"Manufacturer not provided")}
-     ${item.model?" · "+esc(item.model):""}
-     ${item.year?" · "+esc(item.year):""}
-    </p>
-    <p class="description">${esc(item.description||"Community aircraft submission.")}</p>
-    <div class="spec-grid">${renderSpecs(item)}</div>
-    <p class="status">Posted by: ${esc(item.postedBy||item.contributor||"AERONVEX contributor")}</p>
-   </div>
-  </article>
- `).join("");
-}
+ items.forEach(([id,item])=>{
+  const card=document.createElement("article");
+  card.className="aircraft-card";
 
-/* PENDING OWNER DASHBOARD */
-function renderPending(){
- if(!isOwner())return;
-
- $("pendingStatus").textContent=
-  `${pendingAircraft.length} submission(s) waiting for review.`;
-
- $("pendingList").innerHTML=pendingAircraft.length?
-  pendingAircraft.map(item=>`
-   <div class="pending-item">
-    <img src="${esc(item.photoURL)}" alt="${esc(item.name)}">
-    <div>
-     <h3>${esc(item.name)}</h3>
-     <p class="status">${esc(item.type)} · ${esc(item.manufacturer||"")}</p>
-     <p class="description">${esc(item.description||"No description.")}</p>
-     <p class="status">Contributor: ${esc(item.contributor||"Not provided")}</p>
-     <p class="status">Posted by: ${esc(item.postedBy||"Not provided")}</p>
-     <div class="pending-actions">
-      <button class="small-btn approve-btn" data-approve="${esc(item.id)}">Approve</button>
-      <button class="small-btn reject-btn" data-reject="${esc(item.id)}">Reject</button>
-     </div>
+  card.innerHTML=`
+   <img src="${escapeHTML(item.photoURL||"")}" alt="${escapeHTML(item.name||"Aircraft")}" loading="lazy" onerror="this.style.display='none'">
+   <div class="card-body">
+    <span class="type-label">${escapeHTML(item.type||"Other")}</span>
+    <h3>${escapeHTML(item.name||"Unnamed aircraft")}</h3>
+    <p>${escapeHTML(item.manufacturer||"Not specified")}</p>
+    <p>${escapeHTML(item.description||"Discover this aircraft.")}</p>
+    <div class="card-details">
+     <div class="detail">MODEL / YEAR<strong>${escapeHTML(item.modelYear||"Not specified")}</strong></div>
+     <div class="detail">WEIGHT<strong>${escapeHTML(item.weight||"Not specified")}</strong></div>
+     <div class="detail">TOP SPEED<strong>${escapeHTML(item.topSpeed||"Not specified")}</strong></div>
+     <div class="detail">RANGE<strong>${escapeHTML(item.range||"Not specified")}</strong></div>
+     <div class="detail" style="grid-column:1/-1">ENGINE<strong>${escapeHTML(item.engine||"Not specified")}</strong></div>
     </div>
-   </div>
-  `).join(""):'<p class="status">No pending aircraft submissions.</p>';
+    <div class="contributor">SHARED BY: ${escapeHTML(item.contributor||"AERONVEX community")}</div>
+   </div>`;
 
- $("pendingList").querySelectorAll("[data-approve]").forEach(button=>
-  button.addEventListener("click",()=>reviewAircraft(button.dataset.approve,true))
- );
- $("pendingList").querySelectorAll("[data-reject]").forEach(button=>
-  button.addEventListener("click",()=>reviewAircraft(button.dataset.reject,false))
- );
+  grid.appendChild(card);
+ });
 }
 
-/* PUBLISHED OWNER LIST */
-function renderPublished(){
- if(!isOwner())return;
+/* CLOUDINARY UPLOAD */
 
- $("publishedList").innerHTML=approvedAircraft.length?
-  approvedAircraft.map(item=>`
-   <div class="pending-item">
-    <img src="${esc(item.photoURL)}" alt="${esc(item.name)}">
-    <div>
-     <h3>${esc(item.name)}</h3>
-     <p class="status">${esc(item.type)} · ${esc(item.manufacturer||"")}</p>
-     <button class="small-btn reject-btn" data-delete="${esc(item.id)}">Remove from gallery</button>
-    </div>
-   </div>
-  `).join(""):'<p class="status">No published aircraft yet.</p>';
-
- $("publishedList").querySelectorAll("[data-delete]").forEach(button=>
-  button.addEventListener("click",async()=>{
-   if(!isOwner()||!confirm("Remove this aircraft from the public gallery?"))return;
-   try{
-    await remove(ref(db,APPROVED_PATH+"/"+button.dataset.delete));
-   }catch(e){alert("Could not remove aircraft: "+e.message)}
-  })
- );
-}
-
-/* APPROVE OR REJECT */
-async function reviewAircraft(id,approve){
- if(!isOwner())return;
- const item=pendingAircraft.find(entry=>entry.id===id);
- if(!item)return;
-
- try{
-  if(approve){
-   const published={...item,status:"approved",reviewedAt:Date.now()};
-   delete published.id;
-   await set(ref(db,APPROVED_PATH+"/"+id),published);
-  }
-  await remove(ref(db,PENDING_PATH+"/"+id));
- }catch(e){
-  alert("Could not update submission: "+e.message);
- }
-}
-
-/* CLOUDINARY IMAGE UPLOAD */
 async function uploadPhoto(file){
- const url=`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`;
- const body=new FormData();
- body.append("file",file);
- body.append("upload_preset",CLOUDINARY_UPLOAD_PRESET);
- body.append("folder",CLOUDINARY_FOLDER);
+ const formData=new FormData();
+ formData.append("file",file);
+ formData.append("upload_preset",CLOUDINARY_UPLOAD_PRESET);
+ formData.append("folder","aeronvex");
 
- const response=await fetch(url,{method:"POST",body});
+ const response=await fetch(
+  `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`,
+  {method:"POST",body:formData}
+ );
+
  const result=await response.json();
 
- if(!response.ok)throw new Error(result.error?.message||"Photo upload failed.");
- if(!result.secure_url)throw new Error("Cloudinary did not return a photo URL.");
+ if(!response.ok||!result.secure_url){
+  throw new Error(result.error?.message||"Photo upload failed.");
+ }
+
  return result.secure_url;
 }
 
-/* SUBMIT AIRCRAFT */
-$("submitForm").addEventListener("submit",async e=>{
- e.preventDefault();
+/* SUBMISSION */
 
- const file=$("aPhoto").files[0];
- if(!file){msg("submitStatus","Please choose an aircraft photo.","error");return}
- if(!["image/jpeg","image/png","image/webp"].includes(file.type)){
-  msg("submitStatus","Upload a JPG, PNG or WebP image.","error");return;
- }
- if(file.size>5*1024*1024){
-  msg("submitStatus","The photo must be 5 MB or smaller.","error");return;
- }
+$("aircraftForm").addEventListener("submit",async event=>{
+ event.preventDefault();
+
+ const button=$("submitButton");
+ const file=$("aircraftPhoto").files[0];
+
  if(!auth.currentUser){
-  msg("submitStatus","Connecting. Please try again.","error");return;
- }
-
- const button=$("sendButton");
- button.disabled=true;
- button.textContent="Uploading...";
- msg("submitStatus","Uploading your photo. Please wait...");
-
- try{
-  const photoURL=await uploadPhoto(file);
-  const newRef=push(ref(db,PENDING_PATH));
-
-  const item={
-   type:$("aType").value,
-   name:$("aName").value.trim(),
-   manufacturer:$("aManufacturer").value.trim(),
-   model:$("aModel").value.trim(),
-   year:$("aYear").value||"",
-   weight:$("aWeight").value||"",
-   speed:$("aSpeed").value||"",
-   engine:$("aEngine").value.trim(),
-   range:$("aRange").value||"",
-   description:$("aDescription").value.trim(),
-   contributor:$("aContributor").value.trim(),
-   postedBy:$("aPostedBy").value.trim(),
-   photoURL,
-   status:"pending",
-   createdAt:Date.now()
-  };
-
-  await set(newRef,item);
-  $("submitForm").reset();
-  msg("submitStatus","Submitted successfully! Your aircraft will appear after owner approval.","success");
- }catch(error){
-  console.error(error);
-  msg("submitStatus","Submission failed: "+error.message,"error");
- }finally{
-  button.disabled=false;
-  button.textContent="Send for Approval";
- }
-});
-
-/* OWNER EMAIL/PASSWORD LOGIN */
-$("loginForm").addEventListener("submit",async e=>{
- e.preventDefault();
-
- const email=$("ownerEmail").value.trim().toLowerCase();
- const password=$("ownerPassword").value;
-
- if(email!==OWNER_EMAIL.toLowerCase()){
-  msg("loginStatus","This email is not authorised for owner access.","error");
+  showStatus("submitStatus","Connecting to the server. Please try again.","#a34828");
   return;
  }
 
+ if(!file){
+  showStatus("submitStatus","Please choose an aircraft photo.","#a34828");
+  return;
+ }
+
+ if(!["image/jpeg","image/png","image/webp"].includes(file.type)){
+  showStatus("submitStatus","Use a JPG, PNG or WebP image.","#a34828");
+  return;
+ }
+
+ if(file.size>5*1024*1024){
+  showStatus("submitStatus","Your photo must be smaller than 5 MB.","#a34828");
+  return;
+ }
+
+ button.disabled=true;
+ button.textContent="UPLOADING...";
+
  try{
-  await signInWithEmailAndPassword(auth,email,password);
+  const photoURL=await uploadPhoto(file);
 
-  if(auth.currentUser?.email?.toLowerCase()!==OWNER_EMAIL.toLowerCase()){
-   await signOut(auth);
-   msg("loginStatus","This account is not authorised.","error");
-   return;
-  }
+  const aircraft={
+   contributor:$("contributor").value.trim(),
+   type:$("aircraftType").value,
+   name:$("aircraftName").value.trim(),
+   manufacturer:$("manufacturer").value.trim(),
+   modelYear:$("modelYear").value.trim(),
+   weight:$("weight").value.trim(),
+   topSpeed:$("topSpeed").value.trim(),
+   range:$("range").value.trim(),
+   engine:$("engine").value.trim(),
+   description:$("description").value.trim(),
+   photoURL,
+   status:"pending",
+   submittedAt:Date.now()
+  };
 
-  $("loginForm").reset();
-  msg("loginStatus","Signed in successfully.","success");
-  closeModal("loginModal");
+  const newRef=push(ref(db,PENDING_PATH));
+  await set(newRef,aircraft);
+
+  $("aircraftForm").reset();
+  showStatus("submitStatus","Aircraft submitted successfully! It will appear after owner approval.","#167044");
+
  }catch(error){
   console.error(error);
-  msg("loginStatus","Login failed. Check your email and password.","error");
+  showStatus("submitStatus",friendlyError(error),"#a34828");
+ }finally{
+  button.disabled=false;
+  button.textContent="SUBMIT AIRCRAFT";
+ }
+});
+
+/* OWNER LOGIN */
+
+$("loginForm").addEventListener("submit",async event=>{
+ event.preventDefault();
+
+ const button=$("loginButton");
+ button.disabled=true;
+ button.textContent="SIGNING IN...";
+
+ try{
+  const email=$("ownerEmail").value.trim().toLowerCase();
+  const password=$("ownerPassword").value;
+
+  if(email!==OWNER_EMAIL){
+   throw new Error("This email is not authorised as the AERONVEX owner.");
+  }
+
+  await signInWithEmailAndPassword(auth,email,password);
+  showStatus("loginStatus","Login successful.","#167044");
+  $("loginForm").reset();
+
+ }catch(error){
+  showStatus("loginStatus",friendlyError(error),"#a34828");
+ }finally{
+  button.disabled=false;
+  button.textContent="SIGN IN";
+ }
+});
+
+/* DASHBOARD */
+
+function renderPending(){
+ const container=$("pendingList");
+ container.innerHTML="";
+
+ const entries=Object.entries(pendingAircraft);
+
+ if(!entries.length){
+  container.textContent="There are no pending aircraft submissions.";
+  return;
+ }
+
+ entries.forEach(([id,item])=>{
+  const div=document.createElement("div");
+  div.className="dashboard-item";
+
+  div.innerHTML=`
+   <img src="${escapeHTML(item.photoURL||"")}" alt="">
+   <div class="dashboard-item-info">
+    <strong>${escapeHTML(item.name||"Unnamed aircraft")}</strong>
+    <p>${escapeHTML(item.type||"Other")} · Shared by ${escapeHTML(item.contributor||"Unknown")}</p>
+   </div>
+   <div>
+    <button class="small-action approve-btn" data-approve="${escapeHTML(id)}">Approve</button>
+    <button class="small-action reject-btn" data-reject="${escapeHTML(id)}">Reject</button>
+   </div>`;
+
+  container.appendChild(div);
+ });
+}
+
+function renderPublished(){
+ const container=$("publishedList");
+ container.innerHTML="";
+
+ const entries=Object.entries(approvedAircraft);
+
+ if(!entries.length){
+  container.textContent="No aircraft have been published yet.";
+  return;
+ }
+
+ entries.forEach(([id,item])=>{
+  const div=document.createElement("div");
+  div.className="dashboard-item";
+
+  div.innerHTML=`
+   <img src="${escapeHTML(item.photoURL||"")}" alt="">
+   <div class="dashboard-item-info">
+    <strong>${escapeHTML(item.name||"Unnamed aircraft")}</strong>
+    <p>${escapeHTML(item.type||"Other")} · Shared by ${escapeHTML(item.contributor||"Unknown")}</p>
+   </div>
+   <button class="small-action delete-btn" data-delete="${escapeHTML(id)}">Remove</button>`;
+
+  container.appendChild(div);
+ });
+}
+
+/* PENDING ACTIONS */
+
+$("pendingList").addEventListener("click",async event=>{
+ if(!isOwner)return;
+
+ const approveId=event.target.dataset.approve;
+ const rejectId=event.target.dataset.reject;
+
+ try{
+  if(approveId){
+   const item=pendingAircraft[approveId];
+   if(!item)return;
+
+   await set(ref(db,`${APPROVED_PATH}/${approveId}`),{
+    ...item,
+    status:"approved",
+    approvedAt:Date.now()
+   });
+
+   await remove(ref(db,`${PENDING_PATH}/${approveId}`));
+
+  }else if(rejectId){
+   if(!confirm("Reject this aircraft submission?"))return;
+   await remove(ref(db,`${PENDING_PATH}/${rejectId}`));
+  }
+ }catch(error){alert(friendlyError(error));}
+});
+
+/* REMOVE PUBLISHED AIRCRAFT */
+
+$("publishedList").addEventListener("click",async event=>{
+ if(!isOwner)return;
+
+ const deleteId=event.target.dataset.delete;
+ if(!deleteId)return;
+
+ if(!confirm("Remove this aircraft from the public gallery?"))return;
+
+ try{
+  await remove(ref(db,`${APPROVED_PATH}/${deleteId}`));
+ }catch(error){alert(friendlyError(error));}
+});
+
+/* DATABASE LISTENERS */
+
+function startPendingListener(){
+ if(pendingListenerStarted)return;
+ pendingListenerStarted=true;
+
+ onValue(ref(db,PENDING_PATH),snapshot=>{
+  if(!isOwner)return;
+  pendingAircraft=aircraftData(snapshot);
+  renderPending();
+ },error=>{
+  console.error("Pending listener:",error);
+  $("pendingList").textContent="Could not load pending submissions.";
+ });
+}
+
+onValue(ref(db,APPROVED_PATH),snapshot=>{
+ approvedAircraft=aircraftData(snapshot);
+ renderGallery();
+ if(isOwner)renderPublished();
+},error=>{
+ console.error("Gallery listener:",error);
+ $("aircraftGrid").innerHTML='<div class="empty-message">Unable to load the gallery. Please try again later.</div>';
+});
+
+/* AUTH STATE */
+
+onAuthStateChanged(auth,async user=>{
+ isOwner=Boolean(
+  user&&user.email&&user.email.toLowerCase()===OWNER_EMAIL
+ );
+
+ $("reviewMenu").classList.toggle("hidden",!isOwner);
+ $("signOutMenu").classList.toggle("hidden",!isOwner);
+ $("dashboardSection").classList.toggle("hidden",!isOwner);
+
+ if(isOwner){
+  $("loginSection").classList.add("hidden");
+  startPendingListener();
+  renderPending();
+  renderPublished();
+ }else{
+  $("dashboardSection").classList.add("hidden");
+
+  if(!user){
+   try{
+    await signInAnonymously(auth);
+   }catch(error){
+    console.error("Anonymous sign-in failed:",error);
+   }
+  }
  }
 });
 </script>
+
 </body>
 </html>
-
