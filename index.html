@@ -7,7 +7,6 @@
 <meta name="theme-color" content="#8ed8f8">
 <title>AERONVEX | Explore Beyond the Sky</title>
 <meta name="description" content="Discover and share aircraft from around the world with AERONVEX.">
-
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
@@ -354,8 +353,6 @@ import {
  onValue
 } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
 
-/* FIREBASE CONFIGURATION */
-
 const firebaseConfig = {
  apiKey: "AIzaSyD1mKQA4ZkQ9BoYCUpaEFGGi8rwyU8LOPA",
  authDomain: "super-car-collection.firebaseapp.com",
@@ -367,13 +364,9 @@ const firebaseConfig = {
  measurementId: "G-7JQ0VKWLLM"
 };
 
-/* OWNER AND CLOUDINARY */
-
 const OWNER_EMAIL = "okitharison8@gmail.com";
 const CLOUDINARY_CLOUD_NAME = "zl6ldx0y";
 const CLOUDINARY_UPLOAD_PRESET = "car_gallery_upload";
-
-/* SEPARATE AERONVEX DATABASE PATHS */
 
 const PENDING_PATH = "aeronvexPendingAircraft";
 const APPROVED_PATH = "aeronvexApprovedAircraft";
@@ -391,8 +384,6 @@ let pendingListenerStarted = false;
 const $ = id => document.getElementById(id);
 
 $("year").textContent = new Date().getFullYear();
-
-/* HELPERS */
 
 function showStatus(id,message,color="#247ba8"){
  $(id).textContent=message;
@@ -422,15 +413,11 @@ function friendlyError(error){
  return messages[error.code]||error.message||"Something went wrong.";
 }
 
-/* INTRO */
-
 $("enterGallery").addEventListener("click",()=>{
  $("intro").style.opacity="0";
  $("intro").style.transition="opacity .7s";
  setTimeout(()=>$("intro").remove(),750);
 });
-
-/* NAVIGATION */
 
 window.scrollToSection=function(id){
  const section=$(id);
@@ -464,8 +451,6 @@ $("signOutMenu").addEventListener("click",async()=>{
  }catch(error){alert(friendlyError(error));}
 });
 
-/* FILTERS */
-
 $("filters").addEventListener("click",event=>{
  const button=event.target.closest("[data-filter]");
  if(!button)return;
@@ -477,8 +462,6 @@ $("filters").addEventListener("click",event=>{
 });
 
 $("searchInput").addEventListener("input",renderGallery);
-
-/* GALLERY */
 
 function renderGallery(){
  const grid=$("aircraftGrid");
@@ -521,8 +504,6 @@ function renderGallery(){
  });
 }
 
-/* CLOUDINARY UPLOAD */
-
 async function uploadPhoto(file){
  const formData=new FormData();
  formData.append("file",file);
@@ -542,8 +523,6 @@ async function uploadPhoto(file){
 
  return result.secure_url;
 }
-
-/* SUBMISSION */
 
 $("aircraftForm").addEventListener("submit",async event=>{
  event.preventDefault();
@@ -608,8 +587,6 @@ $("aircraftForm").addEventListener("submit",async event=>{
  }
 });
 
-/* OWNER LOGIN */
-
 $("loginForm").addEventListener("submit",async event=>{
  event.preventDefault();
 
@@ -636,8 +613,6 @@ $("loginForm").addEventListener("submit",async event=>{
   button.textContent="SIGN IN";
  }
 });
-
-/* DASHBOARD */
 
 function renderPending(){
  const container=$("pendingList");
@@ -696,8 +671,6 @@ function renderPublished(){
  });
 }
 
-/* PENDING ACTIONS */
-
 $("pendingList").addEventListener("click",async event=>{
  if(!isOwner)return;
 
@@ -724,8 +697,6 @@ $("pendingList").addEventListener("click",async event=>{
  }catch(error){alert(friendlyError(error));}
 });
 
-/* REMOVE PUBLISHED AIRCRAFT */
-
 $("publishedList").addEventListener("click",async event=>{
  if(!isOwner)return;
 
@@ -738,8 +709,6 @@ $("publishedList").addEventListener("click",async event=>{
   await remove(ref(db,`${APPROVED_PATH}/${deleteId}`));
  }catch(error){alert(friendlyError(error));}
 });
-
-/* DATABASE LISTENERS */
 
 function startPendingListener(){
  if(pendingListenerStarted)return;
@@ -763,8 +732,6 @@ onValue(ref(db,APPROVED_PATH),snapshot=>{
  console.error("Gallery listener:",error);
  $("aircraftGrid").innerHTML='<div class="empty-message">Unable to load the gallery. Please try again later.</div>';
 });
-
-/* AUTH STATE */
 
 onAuthStateChanged(auth,async user=>{
  isOwner=Boolean(
