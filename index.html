@@ -1,0 +1,620 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AERONVEX COLLECTION | Beyond the Sky</title>
+<meta name="theme-color" content="#08090d">
+<meta name="description" content="Discover aviation legends at AERONVEX COLLECTION. Explore aircraft and share your passion for aviation.">
+
+<style>
+:root {
+  --red: #ff171f;
+  --black: #050608;
+  --panel: #101218;
+  --white: #f5f5f5;
+  --muted: #a4a7b0;
+  --border: #282b33;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--black);
+  color: var(--white);
+  font-family: Arial, Helvetica, sans-serif;
+  overflow-x: hidden;
+}
+
+a { text-decoration: none; color: inherit; }
+
+button, input { font-family: inherit; }
+
+header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(3,4,6,.96);
+  border-bottom: 1px solid var(--red);
+  backdrop-filter: blur(15px);
+}
+
+.nav {
+  max-width: 1450px;
+  margin: auto;
+  min-height: 75px;
+  padding: 12px 4%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 25px;
+}
+
+.logo {
+  font-size: 27px;
+  font-weight: 900;
+  font-style: italic;
+  letter-spacing: 2px;
+}
+
+.logo span { color: var(--red); }
+
+.logo small {
+  display: block;
+  font-size: 9px;
+  letter-spacing: 7px;
+  text-align: center;
+  font-style: normal;
+}
+
+nav {
+  display: flex;
+  gap: 28px;
+  align-items: center;
+}
+
+nav a {
+  font-size: 12px;
+  font-weight: bold;
+  transition: .2s;
+}
+
+nav a:hover { color: var(--red); }
+
+.owner-btn {
+  padding: 11px 18px;
+  border: 1px solid var(--red);
+  color: var(--red);
+  background: transparent;
+  font-weight: bold;
+  font-size: 11px;
+}
+
+.hero {
+  min-height: 570px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  background:
+    linear-gradient(90deg,rgba(0,0,0,.92),rgba(0,0,0,.48),transparent),
+    linear-gradient(0deg,#050608,transparent 25%),
+    url("https://images.unsplash.com/photo-1474302770737-173ee21bab63?auto=format&fit=crop&w=2000&q=90")
+    center/cover;
+  border-bottom: 1px solid var(--red);
+}
+
+.hero-content {
+  width: 100%;
+  max-width: 1450px;
+  margin: auto;
+  padding: 70px 5%;
+}
+
+.tag {
+  color: var(--red);
+  font-size: 12px;
+  letter-spacing: 4px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.hero h1 {
+  font-size: clamp(55px,8vw,105px);
+  line-height: .95;
+  font-weight: 900;
+  font-style: italic;
+  text-transform: uppercase;
+}
+
+.hero h1 span { color: var(--red); }
+
+.hero p {
+  color: #ddd;
+  max-width: 520px;
+  line-height: 1.7;
+  margin: 25px 0;
+}
+
+.btn {
+  display: inline-block;
+  padding: 15px 25px;
+  background: var(--red);
+  color: white;
+  border: 1px solid var(--red);
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: .25s;
+  clip-path: polygon(8% 0,100% 0,92% 100%,0 100%);
+}
+
+.btn:hover {
+  background: transparent;
+  color: var(--red);
+}
+
+.btn-outline {
+  background: transparent;
+  margin-left: 12px;
+  border-color: #aaa;
+}
+
+section {
+  max-width: 1450px;
+  margin: auto;
+  padding: 65px 4%;
+}
+
+.gallery-section {
+  background:
+    linear-gradient(180deg,rgba(0,0,0,.1),#050608),
+    url("https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=1600&q=80")
+    center top/cover;
+}
+
+.heading {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.heading .tag { margin-bottom: 10px; }
+
+.heading h2 {
+  font-size: clamp(28px,5vw,45px);
+  font-style: italic;
+  font-weight: 900;
+}
+
+.heading h2 span { color: var(--red); }
+
+.heading p {
+  margin-top: 10px;
+  color: var(--muted);
+}
+
+.search {
+  display: block;
+  max-width: 650px;
+  width: 100%;
+  margin: 25px auto;
+  padding: 15px 20px;
+  border-radius: 30px;
+  background: #101218;
+  color: white;
+  border: 1px solid #444;
+  outline: none;
+}
+
+.search:focus { border-color: var(--red); }
+
+.filters {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 30px;
+}
+
+.filter {
+  background: #101218;
+  color: white;
+  border: 1px solid #444;
+  padding: 12px 20px;
+  font-size: 11px;
+  font-weight: bold;
+  cursor: pointer;
+  transform: skew(-8deg);
+}
+
+.filter.active,
+.filter:hover {
+  background: var(--red);
+  border-color: var(--red);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(5,minmax(0,1fr));
+  gap: 15px;
+}
+
+.card {
+  background: #0c0e13;
+  border: 1px solid #292c35;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: .3s;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  border-color: var(--red);
+  box-shadow: 0 0 20px rgba(255,23,31,.15);
+}
+
+.card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  display: block;
+}
+
+.card-content { padding: 15px; }
+
+.category {
+  color: var(--red);
+  font-size: 10px;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-style: italic;
+}
+
+.card h3 {
+  font-size: 17px;
+  margin: 9px 0;
+}
+
+.card p {
+  color: #bbb;
+  font-size: 12px;
+  line-height: 1.5;
+  min-height: 38px;
+}
+
+.specs {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  border-top: 1px solid #333;
+  padding-top: 12px;
+  margin-top: 12px;
+  font-size: 11px;
+}
+
+.specs span { color: #ddd; }
+
+.about {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 35px;
+  background: #090a0e;
+  border-top: 1px solid #333;
+  border-bottom: 1px solid var(--red);
+}
+
+.about img {
+  width: 100%;
+  height: 320px;
+  object-fit: cover;
+}
+
+.about h2 {
+  font-size: clamp(30px,5vw,50px);
+  font-style: italic;
+  margin-bottom: 20px;
+}
+
+.about h2 span { color: var(--red); }
+
+.about p {
+  color: #bbb;
+  line-height: 1.8;
+  font-size: 14px;
+}
+
+.community {
+  text-align: center;
+  background:
+    linear-gradient(rgba(0,0,0,.65),rgba(0,0,0,.8)),
+    url("https://images.unsplash.com/photo-1517976487492-5750f3195933?auto=format&fit=crop&w=1800&q=85")
+    center/cover;
+  border-bottom: 1px solid var(--red);
+}
+
+.community h2 {
+  font-size: clamp(30px,5vw,50px);
+  font-style: italic;
+}
+
+.community h2 span { color: var(--red); }
+
+.community p {
+  max-width: 650px;
+  margin: 20px auto;
+  line-height: 1.7;
+  color: #ddd;
+}
+
+footer {
+  padding: 35px 5%;
+  text-align: center;
+  background: #030405;
+  border-top: 1px solid #222;
+  color: #aaa;
+  font-size: 12px;
+  line-height: 2;
+}
+
+footer strong { color: var(--red); }
+
+.no-results {
+  display: none;
+  text-align: center;
+  padding: 30px;
+  color: #aaa;
+}
+
+@media(max-width:1100px) {
+  .grid { grid-template-columns: repeat(3,1fr); }
+}
+
+@media(max-width:700px) {
+  .nav { flex-wrap: wrap; }
+  nav { gap: 14px; }
+  nav a { font-size: 10px; }
+  .owner-btn { display: none; }
+  .hero { min-height: 500px; }
+  .grid { grid-template-columns: repeat(2,1fr); }
+  .about { grid-template-columns: 1fr; }
+  .card img { height: 150px; }
+}
+
+@media(max-width:450px) {
+  .grid { grid-template-columns: 1fr; }
+  .hero h1 { font-size: 55px; }
+  .btn-outline { margin: 10px 0; }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="nav">
+    <a class="logo" href="#">
+      AERO<span>NVEX</span>
+      <small>COLLECTION</small>
+    </a>
+
+    <nav>
+      <a href="#home">⌂ HOME</a>
+      <a href="#gallery">✈ AIRCRAFT</a>
+      <a href="#about">ABOUT</a>
+      <a href="#submit">SUBMIT</a>
+    </nav>
+
+    <button class="owner-btn" onclick="alert('Owner login will be connected later.')">
+      ◉ OWNER LOGIN
+    </button>
+  </div>
+</header>
+
+<div class="hero" id="home">
+  <div class="hero-content">
+    <div class="tag">//// THE WORLD OF AVIATION</div>
+
+    <h1>BEYOND THE<br><span>SKY.</span></h1>
+
+    <p>
+      Discover legendary aircraft. Explore aviation history.
+      Welcome to <strong>AERONVEX</strong> COLLECTION.
+    </p>
+
+    <a href="#gallery" class="btn">✈ EXPLORE AIRCRAFT</a>
+    <a href="#submit" class="btn btn-outline">SHARE YOUR AIRCRAFT</a>
+  </div>
+</div>
+
+<section class="gallery-section" id="gallery">
+
+  <div class="heading">
+    <div class="tag">//// THE COLLECTION</div>
+    <h2>AVIATION <span>LEGENDS</span></h2>
+    <p>Explore aircraft from across the world.</p>
+  </div>
+
+  <input class="search" id="searchInput"
+    placeholder="⌕ Search aircraft, manufacturer...">
+
+  <div class="filters">
+    <button class="filter active" data-category="all">ALL AIRCRAFT</button>
+    <button class="filter" data-category="Commercial">✈ COMMERCIAL</button>
+    <button class="filter" data-category="Military">MILITARY</button>
+    <button class="filter" data-category="Private">PRIVATE</button>
+    <button class="filter" data-category="Cargo">CARGO</button>
+  </div>
+
+  <div class="grid" id="aircraftGrid">
+
+    <article class="card" data-category="Commercial">
+      <img src="https://images.unsplash.com/photo-1474302770737-173ee21bab63?auto=format&fit=crop&w=800&q=85" alt="Airliner">
+      <div class="card-content">
+        <div class="category">Commercial</div>
+        <h3>Airbus A380</h3>
+        <p>The world's largest passenger airliner.</p>
+        <div class="specs">
+          <span>Mach 0.85</span><span>15,200 km</span>
+        </div>
+      </div>
+    </article>
+
+    <article class="card" data-category="Commercial">
+      <img src="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=800&q=85" alt="Boeing aircraft">
+      <div class="card-content">
+        <div class="category">Commercial</div>
+        <h3>Boeing 747</h3>
+        <p>An iconic jumbo jet that changed aviation.</p>
+        <div class="specs">
+          <span>Mach 0.855</span><span>13,450 km</span>
+        </div>
+      </div>
+    </article>
+
+    <article class="card" data-category="Military">
+      <img src="https://images.unsplash.com/photo-1517976487492-5750f3195933?auto=format&fit=crop&w=800&q=85" alt="Military aircraft">
+      <div class="card-content">
+        <div class="category">Military</div>
+        <h3>F-22 Raptor</h3>
+        <p>A fifth-generation stealth fighter.</p>
+        <div class="specs">
+          <span>Mach 2+</span><span>Stealth</span>
+        </div>
+      </div>
+    </article>
+
+    <article class="card" data-category="Private">
+      <img src="https://images.unsplash.com/photo-1540962351504-03099e0a754b?auto=format&fit=crop&w=800&q=85" alt="Private aircraft">
+      <div class="card-content">
+        <div class="category">Private</div>
+        <h3>Gulfstream G650</h3>
+        <p>Luxury business aviation at its finest.</p>
+        <div class="specs">
+          <span>Mach 0.925</span><span>12,960 km</span>
+        </div>
+      </div>
+    </article>
+
+    <article class="card" data-category="Cargo">
+      <img src="https://images.unsplash.com/photo-1583074544704-7c2a8f6b0d4f?auto=format&fit=crop&w=800&q=85" alt="Cargo airplane">
+      <div class="card-content">
+        <div class="category">Cargo</div>
+        <h3>Antonov An-124</h3>
+        <p>A giant aircraft built for heavy transport.</p>
+        <div class="specs">
+          <span>Mach 0.75</span><span>150 tonnes</span>
+        </div>
+      </div>
+    </article>
+
+  </div>
+
+  <div class="no-results" id="noResults">
+    No aircraft found. Try another search.
+  </div>
+
+</section>
+
+<section class="about" id="about">
+
+  <img src="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=1000&q=85" alt="Aircraft above clouds">
+
+  <div>
+    <div class="tag">//// OUR MISSION</div>
+    <h2>WELCOME TO<br><span>AERONVEX</span></h2>
+
+    <p>
+      AERONVEX COLLECTION is a place for aviation enthusiasts.
+      From legendary commercial airliners to extraordinary military
+      aircraft and private jets, discover the machines that connect
+      our world and push the boundaries of flight.
+    </p>
+  </div>
+
+</section>
+
+<section class="community" id="submit">
+  <div class="tag">//// JOIN THE COMMUNITY</div>
+
+  <h2>YOUR AIRCRAFT.<br><span>YOUR LEGACY.</span></h2>
+
+  <p>
+    Have an amazing aircraft photo?
+    Share your passion with the AERONVEX community.
+    Become part of our growing aviation collection.
+  </p>
+
+  <button class="btn" onclick="submissionMessage()">
+    ✈ SUBMIT YOUR AIRCRAFT
+  </button>
+
+  <p id="message" style="display:none;color:#ff171f;">
+    Aircraft submissions are coming soon!
+  </p>
+</section>
+
+<footer>
+  <div class="logo">AERO<span>NVEX</span></div>
+  <p>BEYOND THE SKY. ABOVE THE ORDINARY.</p>
+  <p>© <span id="year"></span> AERONVEX COLLECTION.</p>
+  <p>Created by <strong>YOUR NAME</strong></p>
+</footer>
+
+<script>
+const searchInput = document.getElementById("searchInput");
+const cards = [...document.querySelectorAll(".card")];
+const filters = [...document.querySelectorAll(".filter")];
+
+let category = "all";
+
+function updateGallery() {
+  let search = searchInput.value.toLowerCase();
+  let count = 0;
+
+  cards.forEach(card => {
+    const categoryMatch =
+      category === "all" || card.dataset.category === category;
+
+    const searchMatch =
+      card.textContent.toLowerCase().includes(search);
+
+    const visible = categoryMatch && searchMatch;
+
+    card.style.display = visible ? "" : "none";
+
+    if (visible) count++;
+  });
+
+  document.getElementById("noResults").style.display =
+    count ? "none" : "block";
+}
+
+searchInput.addEventListener("input", updateGallery);
+
+filters.forEach(button => {
+  button.addEventListener("click", () => {
+    filters.forEach(b => b.classList.remove("active"));
+    button.classList.add("active");
+
+    category = button.dataset.category;
+    updateGallery();
+  });
+});
+
+function submissionMessage() {
+  document.getElementById("message").style.display = "block";
+}
+
+document.getElementById("year").textContent =
+  new Date().getFullYear();
+</script>
+
+</body>
+</html>
